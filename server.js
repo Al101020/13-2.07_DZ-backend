@@ -1,5 +1,3 @@
-
-
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -9,7 +7,6 @@ import pinoPretty from 'pino-pretty';
 
 const app = express();
 const logger = pino(pinoPretty());
-
 
 app.use(cors());
 app.use(
