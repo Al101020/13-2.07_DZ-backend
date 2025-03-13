@@ -1,5 +1,3 @@
-
-
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -49,104 +47,116 @@ let tickets = [
   },
 ];
 
-// app.use(async (request, response) => {
-//   const { method, id } = request.query;
-//   switch (method) {
-//     case "allTickets":
-//       logger.info('All tickets has been called');
-//       response.send(JSON.stringify(tickets)).end();
-//       break;
-//     case "ticketById": {
-//       const ticket = tickets.find((ticket) => ticket.id === id);
-//       if (!ticket) {
-//         response
-//           .status(404)
-//           .send(JSON.stringify({ message: "Ticket not found" }))
-//           .end();
-//         break;
-//       }
-//       response.send(JSON.stringify(ticket)).end();
-//       break;
-//     }
-//     case "createTicket": {
-//       try {
-//         const createData = request.body;
-//         const newTicket = {
-//           id: crypto.randomUUID(),
-//           name: createData.name,
-//           status: false,
-//           description: createData.description || "",
-//           created: Date.now(),
-//         };
-//         tickets.push(newTicket);
-//         logger.info(`New ticket created: ${JSON.stringify(newTicket)}`);
-//         response.send(JSON.stringify(newTicket)).end();
-//       } catch (error) {
-//         logger.error(`Error creating new ticket: ${error.message}`);
-//         response.status(500).send(JSON.stringify({ error: error.message }));
-//       }
-//       break;
-//     }
-//     case "deleteById": {
-//       const ticket = tickets.find((ticket) => ticket.id === id);
-//       if (ticket) {
-//         tickets = tickets.filter((ticket) => ticket.id !== id);
-//         logger.info(`Ticket deleted: ${JSON.stringify(ticket)}`);
-//         response.status(204).end();
-//       } else {
-//         logger.warn(`Ticket not found: ${id}`);
-//         response
-//           .status(404)
-//           .send(JSON.stringify({ message: "Ticket not found" }))
-//           .end();
-//       }
-//       break;
-//     }
-//     case "updateById": {
-//       const ticket = tickets.find((ticket) => ticket.id === id);
-//       const updateData = request.body;
-//       if (ticket) {
-//         Object.assign(ticket, updateData);
-//         logger.info(`Ticket updated: ${JSON.stringify(ticket)}`);
-//         response.send(JSON.stringify(tickets));
-//       } else {
-//         logger.warn(`Ticket not found: ${id}`);
-//         response
-//           .status(404)
-//           .send(JSON.stringify({ message: "Ticket not found" }))
-//           .end();
-//       }
-//       break;
-//     }
-//     default:
-//       logger.warn(`Unknown method: ${method}`);
-//       response.status(404).end();
-//       break;
-//   }
-// });
+app.use(async (request, response) => {
+  const { method, id } = request.query;
+  switch (method) {
+    case "allTickets":
+      logger.info('All tickets has been called');
+      response.send(JSON.stringify(tickets)).end();
+      break;
+    case "ticketById": {
+      const ticket = tickets.find((ticket) => ticket.id === id);
+      if (!ticket) {
+        response
+          .status(404)
+          .send(JSON.stringify({ message: "Ticket not found" }))
+          .end();
+        break;
+      }
+      response.send(JSON.stringify(ticket)).end();
+      break;
+    }
+    case "createTicket": {
+      try {
+        const createData = request.body;
+        const newTicket = {
+          id: crypto.randomUUID(),
+          name: createData.name,
+          status: false,
+          description: createData.description || "",
+          created: Date.now(),
+        };
+        tickets.push(newTicket);
+        logger.info(`New ticket created: ${JSON.stringify(newTicket)}`);
+        response.send(JSON.stringify(newTicket)).end();
+      } catch (error) {
+        logger.error(`Error creating new ticket: ${error.message}`);
+        response.status(500).send(JSON.stringify({ error: error.message }));
+      }
+      break;
+    }
+    case "deleteById": {
+      const ticket = tickets.find((ticket) => ticket.id === id);
+      if (ticket) {
+        tickets = tickets.filter((ticket) => ticket.id !== id);
+        logger.info(`Ticket deleted: ${JSON.stringify(ticket)}`);
+        response.status(204).end();
+      } else {
+        logger.warn(`Ticket not found: ${id}`);
+        response
+          .status(404)
+          .send(JSON.stringify({ message: "Ticket not found" }))
+          .end();
+      }
+      break;
+    }
+    case "updateById": {
+      const ticket = tickets.find((ticket) => ticket.id === id);
+      const updateData = request.body;
+      if (ticket) {
+        Object.assign(ticket, updateData);
+        logger.info(`Ticket updated: ${JSON.stringify(ticket)}`);
+        response.send(JSON.stringify(tickets));
+      } else {
+        logger.warn(`Ticket not found: ${id}`);
+        response
+          .status(404)
+          .send(JSON.stringify({ message: "Ticket not found" }))
+          .end();
+      }
+      break;
+    }
+    default:
+      logger.warn(`Unknown method: ${method}`);
+      response.status(404).end();
+      break;
+  }
+});
 
 const port = process.env.PORT || 7070;
 
 const bootstrap = async () => {
   try {
-    app.listen(port, () =>
-        logger.info(`Server has been started on http://localhost:${port}`)
-    );
+    app.listen(port, () => {
+      logger.info(`Server has been started on http://localhost:${port}`);
+    });
   } catch (error) {
     console.error(error);
   }
 };
 
+bootstrap();
+
+// const bootstrap = async () => {
+//   try {
+//     app.listen(port, () =>
+//         logger.info(`Server has been started on http://localhost:${port}`)
+//     );
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
 // bootstrap();
 
 // ---------------------------------------------------------
 
-app.get('/', (request, response) => {
-  console.log(`URL: ${request.url}`);
-  response.send('Hello, Server!');
-});
-// Start the server 
-const server = app.listen(port, (error) => {
-  if (error) return console.log(`Error: ${error}`);
-  console.log(`Server listening on port ${server.address().port}`);
-});
+// app.get('/', (request, response) => {
+//   console.log(`URL: ${request.url}`);
+//   response.send('Hello, Server!');
+// });
+// // Start the server 
+// const server = app.listen(port, (error) => {
+//   if (error) return console.log(`Error: ${error}`);
+//   console.log(`Server listening on port ${server.address().port}`);
+// });
